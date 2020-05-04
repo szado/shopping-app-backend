@@ -4,8 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Offer extends Model
 {
+    protected $primaryKey = 'id';
+    protected $table = 'offers';
+    protected $timestamps = true;
+
     public function customer()
     {
         return $this->hasOne(Customer::class);
