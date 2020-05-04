@@ -5,10 +5,21 @@ namespace App\Http\Controllers;
 use App\Offer;
 use Illuminate\Http\Request;
 
+/**
+ * Class OffersController
+ * @package App\Http\Controllers
+ */
 class OffersController extends Controller
 {
+    /**
+     * @var Offer
+     */
     protected $offer;
 
+    /**
+     * OffersController constructor.
+     * @param Offer $offer
+     */
     public function __construct(
         Offer $offer
     ) {
