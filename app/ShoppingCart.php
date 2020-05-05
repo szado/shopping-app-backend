@@ -6,13 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class ShoppingCart extends Model
 {
+    protected $primaryKey = 'id';
+    protected $table = 'shopping_cart';
+    protected $timestamps = true;
+
     public function customer()
     {
         return $this->hasOne(Customer::class);
     }
 
-    public function product()
+    public function offer()
     {
-        return $this->hasOne(Product::class);
+        return $this->hasOne(Offer::class);
     }
 }

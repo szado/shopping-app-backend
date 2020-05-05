@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class BaseTables extends Migration
 {
@@ -13,7 +14,7 @@ class BaseTables extends Migration
      */
     public function up()
     {
-        Schema::table('customers', function (Blueprint $blueprint) {
+        Schema::create('customers', function (Blueprint $blueprint) {
             $blueprint->id();
             $blueprint->text('nickname');
             $blueprint->text('first_name');
@@ -21,12 +22,12 @@ class BaseTables extends Migration
             $blueprint->timestamps();
         });
 
-        Schema::table('categories', function (Blueprint $blueprint) {
+        Schema::create('categories', function (Blueprint $blueprint) {
             $blueprint->id();
             $blueprint->text('name');
         });
 
-        Schema::create('products', function (Blueprint $blueprint) {
+        Schema::create('offers', function (Blueprint $blueprint) {
             $blueprint->id();
             $blueprint->foreignId('category_id')
                 ->references('id')
@@ -36,22 +37,26 @@ class BaseTables extends Migration
                 ->on('customers');
             $blueprint->text('title');
             $blueprint->text('description');
-            $blueprint->decimal('price', 1, 2);
+            $blueprint->decimal('price', 10, 2);
             $blueprint->timestamps();
-            $blueprint->index(['category_id', 'customer_id', 'title', 'description']);
+            $blueprint->index(['category_id', 'customer_id']);
         });
 
-        Schema::table('shopping_cart', function (Blueprint $blueprint) {
+        Schema::create('shopping_cart', function (Blueprint $blueprint) {
             $blueprint->id();
             $blueprint->foreignId('customer_id')
                 ->references('id')
                 ->on('customers');
             $blueprint->foreignId('product_id')
                 ->references('id')
-                ->on('products');
+                ->on('offers');
             $blueprint->integer('quantity');
             $blueprint->index(['customer_id', 'product_id']);
         });
+
+        // create fulltext indexes
+        // laravel cannot handle them in eloquent
+        DB::statement('ALTER TABLE `offers` ADD FULLTEXT full(`title`, `description`)');
     }
 
     /**
@@ -61,9 +66,9 @@ class BaseTables extends Migration
      */
     public function down()
     {
-        Schema::drop('shopping_cart');
-        Schema::drop('products');
-        Schema::drop('categories');
-        Schema::drop('customers');
+        Schema::dropIfExists('shopping_cart');
+        Schema::dropIfExists('offers');
+        Schema::dropIfExists('categories');
+        Schema::dropIfExists('customers');
     }
 }
