@@ -8,7 +8,7 @@ class Customer extends Model
 {
     protected $table = 'customers';
     protected $primaryKey = 'id';
-    protected $timestamps = true;
+    public $timestamps = true;
 
     public function offers()
     {
