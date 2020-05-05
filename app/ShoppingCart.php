@@ -8,7 +8,7 @@ class ShoppingCart extends Model
 {
     protected $primaryKey = 'id';
     protected $table = 'shopping_cart';
-    protected $timestamps = true;
+    public $timestamps = true;
 
     public function customer()
     {

@@ -17,3 +17,17 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/offers/{categoryId?}', 'OffersController@index')->name('offersIndex');
+
+Route::prefix('offer')->group(function() {
+    Route::get('search', 'OffersController@search')->name('offerSearch');
+    Route::get('{offerId}', 'OffersController@show')->name('offerShow');
+    Route::get('create', 'OffersController@create')->name('offerCreate');
+    Route::get('edit', 'OffersController@edit')->name('offerEdit');
+    Route::post('store', 'OffersController@store')->name('offerStore');
+    Route::put('update/{offerId}', 'OffersController@update')->name('offerUpdate');
+    Route::delete('destroy/{offerId}', 'OffersController@destroy')->name('offerDestroy');
+});
+
+Route::get('categories', 'CategoriesController@index')->name('categoriesIndex');
